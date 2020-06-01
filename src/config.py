@@ -1,0 +1,17 @@
+import os
+
+ITEMS_PER_PAGE = 10
+
+DATABASE_USERNAME = os.environ.get('DATABASE_USERNAME')
+DATABASE_PASSWORD = os.environ.get('DATABASE_PASSWORD')
+DATABASE_PORT = os.environ.get('DATABASE_PORT')
+DATABASE_HOST = os.environ.get('DATABASE_HOST')
+DATABASE_NAME = os.environ.get('DATABASE_NAME')
+
+SQLALCHEMY_DATABASE_URI = 'postgresql://{}:{}@{}:{}/{}'.format(
+    DATABASE_USERNAME,
+    DATABASE_PASSWORD,
+    DATABASE_HOST,
+    DATABASE_PORT,
+    DATABASE_NAME
+)
