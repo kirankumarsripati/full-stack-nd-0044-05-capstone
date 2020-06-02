@@ -7,6 +7,7 @@ db = SQLAlchemy()
 
 
 def setup_db(app, database_path=SQLALCHEMY_DATABASE_URI):
+    print('dbpath ' + SQLALCHEMY_DATABASE_URI);
     app.config['SQLALCHEMY_DATABASE_URI'] = database_path
     app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
     migrate = Migrate(app, db)
@@ -18,7 +19,7 @@ def setup_db(app, database_path=SQLALCHEMY_DATABASE_URI):
 class Actor(db.Model):
     __tablename__ = 'actors'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, db.Sequence('actors_id_seq'), primary_key=True)
     name = db.Column(db.String)
     gender = db.Column(db.String)
     age = db.Column(db.Integer)
@@ -51,7 +52,7 @@ class Actor(db.Model):
 class Movie(db.Model):
     __tablename__ = 'movies'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, db.Sequence('movies_id_seq'), primary_key=True)
     title = db.Column(db.String)
     release_year = db.Column(db.Integer)
 
