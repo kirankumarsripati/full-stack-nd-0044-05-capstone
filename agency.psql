@@ -171,14 +171,14 @@ COPY public.movies (id, title, release_year) FROM stdin;
 -- Name: actors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.actors_id_seq', 12, false);
+SELECT pg_catalog.setval('public.actors_id_seq', 20, false);
 
 
 --
 -- Name: movies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.movies_id_seq', 16, false);
+SELECT pg_catalog.setval('public.movies_id_seq', 30, false);
 
 
 --

@@ -7,7 +7,7 @@ from urllib.request import urlopen
 
 AUTH0_DOMAIN = 'dev-jv5b18wv.auth0.com'
 ALGORITHMS = ['RS256']
-API_AUDIENCE = 'dev'
+API_AUDIENCE = 'FSND'
 
 
 class AuthError(Exception):
@@ -15,6 +15,7 @@ class AuthError(Exception):
     AuthError Exception
     A standardized way to communicate auth failure modes
     '''
+
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
@@ -86,13 +87,13 @@ def check_permissions(permission, payload):
         raise AuthError({
             'code': 'invalid_claims',
             'description': 'Permissions not included in JWT'
-        }, 400)
+        }, 401)
 
     if permission not in payload['permissions']:
         raise AuthError({
             'code': 'unauthorized',
             'description': 'Permission not found'
-        }, 403)
+        }, 401)
     return True
 
 
@@ -137,7 +138,7 @@ def verify_decode_jwt(token):
         raise AuthError({
             'code': 'invalid_header',
             'description': 'Unable to find appropriate key'
-        }, 400)
+        }, 401)
 
     try:
         payload = jwt.decode(
@@ -158,7 +159,8 @@ def verify_decode_jwt(token):
     except jwt.JWTClaimsError:
         raise AuthError({
             'code': 'invalid_claims',
-            'description': 'Incorrect claims, please, check the audience and issuer'
+            'description': 'Incorrect claims, please, check the \
+                audience and issuer'
         }, 401)
 
     except Exception:
