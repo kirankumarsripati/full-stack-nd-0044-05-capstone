@@ -7,7 +7,6 @@ db = SQLAlchemy()
 
 
 def setup_db(app, database_path=SQLALCHEMY_DATABASE_URI):
-    print('dbpath ' + SQLALCHEMY_DATABASE_URI);
     app.config['SQLALCHEMY_DATABASE_URI'] = database_path
     app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
     migrate = Migrate(app, db)
@@ -68,7 +67,7 @@ class Movie(db.Model):
         db.session.commit()
 
     def delete(self):
-        db.session.delete()
+        db.session.delete(self)
         db.session.commit()
 
     def format(self):

@@ -141,33 +141,33 @@ class CapstoneTestCase(unittest.TestCase):
         self.assertTrue(data['success'])
         self.assertTrue(data['created'])
 
-    # def test_patch_movie(self):
-    #     movie = {
-    #         'release_year': '2020'
-    #     }
-    #     res = self.client().patch('/movies/3', json=movie)
-    #     data = json.loads(res.data)
+    def test_patch_movie(self):
+        movie = {
+            'release_year': '2020'
+        }
+        res = self.client().patch('/movies/3', json=movie)
+        data = json.loads(res.data)
 
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertTrue(data['success'])
-    #     self.assertEqual(data['updated'], 3)
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertEqual(data['updated'], 3)
 
-    # def test_delete_movie(self):
-    #     res = self.client().delete('/movies/1')
-    #     data = json.loads(res.data)
+    def test_delete_movie(self):
+        res = self.client().delete('/movies/1')
+        data = json.loads(res.data)
 
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertTrue(data['success'])
-    #     self.assertEqual(data['deleted'], 1)
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertEqual(data['deleted'], 1)
 
-    # def test_delete_404_movie(self):
-    #     res = self.client().delete('/movies/999999')
-    #     data = json.loads(res.data)
+    def test_delete_404_movie(self):
+        res = self.client().delete('/movies/999999')
+        data = json.loads(res.data)
 
-    #     self.assertEqual(res.status_code, 404)
-    #     self.assertFalse(data['success'])
-    #     self.assertEqual(data['error'], 404)
-    #     self.assertEqual(data['message'], 'movie not found')
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['error'], 404)
+        self.assertEqual(data['message'], 'movie not found')
 
 
 # Make the tests conveniently executable
