@@ -70,7 +70,7 @@ createdb agency-test
 psql agency-test < agency.psql
 python test_app.py
 ```
-If the test are success, you will see something like this
+If the test are successful, you will see something like this
 ```
 ........................
 ----------------------------------------------------------------------
@@ -107,10 +107,8 @@ Here is a short table about which resources exist and which method you can use o
 - [PATCH /movies](#patch-movies)
 
 <a name="get-actors"></a>
-### Get all Movies
+### GET /actors
 #### Request
-`GET /actors`
-
 ```bash
 curl -i -H $HEADERS https://agency-capstone.herokuapp.com/actors
 ```
@@ -196,12 +194,220 @@ Via: 1.1 vegur
 }
 ```
 <a name="post-actors"></a>
+### POST /actors
+#### Request
+```bash
+curl -i -H $HEADERS -H 'Content-Type: application/json' -X POST -d '{ "name": "Test Actor", "age": 56 }' https://agency-capstone.herokuapp.com/actors
+```
+#### Response
+```bash
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: gunicorn/20.0.4
+Date: Wed, 03 Jun 2020 08:16:27 GMT
+Content-Type: application/json
+Content-Length: 30
+Access-Control-Allow-Headers: Content-Type,Authorization,true
+Access-Control-Allow-Methods: GET,PATCH,POST,DELETE,OPTIONS
+Access-Control-Allow-Origin: *
+Via: 1.1 vegur
+
+{"created":15,"success":true}
+```
+
 <a name="delete-actors"></a>
+### DELETE /actors
+#### Request
+```bash
+curl -i -H $HEADERS -X DELETE https://agency-capstone.herokuapp.com/actors/15
+```
+#### Response
+```bash
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: gunicorn/20.0.4
+Date: Wed, 03 Jun 2020 08:19:52 GMT
+Content-Type: application/json
+Content-Length: 30
+Access-Control-Allow-Headers: Content-Type,Authorization,true
+Access-Control-Allow-Methods: GET,PATCH,POST,DELETE,OPTIONS
+Access-Control-Allow-Origin: *
+Via: 1.1 vegur
+
+{"deleted":15,"success":true}
+```
 <a name="patch-actors"></a>
+### PATCH /actors
+#### Request
+```bash
+curl -i -H $HEADERS -H 'Content-Type: application/json' -X PATCH -d '{ "age": 34 }' https://agency-capstone.herokuapp.com/actors/3
+```
+#### Response
+```bash
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: gunicorn/20.0.4
+Date: Wed, 03 Jun 2020 08:26:14 GMT
+Content-Type: application/json
+Content-Length: 29
+Access-Control-Allow-Headers: Content-Type,Authorization,true
+Access-Control-Allow-Methods: GET,PATCH,POST,DELETE,OPTIONS
+Access-Control-Allow-Origin: *
+Via: 1.1 vegur
+
+{"success":true,"updated":3}
+```
 <a name="get-movies"></a>
+### GET /movies
+#### Request
+```bash
+curl -i -H $HEADERS https://agency-capstone.herokuapp.com/movies
+```
+#### Response
+```bash
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: gunicorn/20.0.4
+Date: Wed, 03 Jun 2020 08:27:55 GMT
+Content-Type: application/json
+Content-Length: 549
+Access-Control-Allow-Headers: Content-Type,Authorization,true
+Access-Control-Allow-Methods: GET,PATCH,POST,DELETE,OPTIONS
+Access-Control-Allow-Origin: *
+Via: 1.1 vegur
+
+{
+  "movies": [
+    {
+      "id": 1,
+      "release_year": 2009,
+      "title": "3 Idiots"
+    },
+    {
+      "id": 2,
+      "release_year": 2019,
+      "title": "Rubaru Roshni"
+    },
+    {
+      "id": 3,
+      "release_year": 2020,
+      "title": "Lal Singh Chaddha"
+    },
+    {
+      "id": 4,
+      "release_year": 2017,
+      "title": "Secret Superstar"
+    },
+    {
+      "id": 5,
+      "release_year": 2018,
+      "title": "Thugs of Hindostan"
+    },
+    {
+      "id": 6,
+      "release_year": 2016,
+      "title": "Dangal"
+    },
+    {
+      "id": 7,
+      "release_year": 2015,
+      "title": "Dil Dhadakne Do"
+    },
+    {
+      "id": 8,
+      "release_year": 2014,
+      "title": "PK"
+    },
+    {
+      "id": 9,
+      "release_year": 2013,
+      "title": "Dhoom 3"
+    },
+    {
+      "id": 10,
+      "release_year": 2012,
+      "title": "Talaash"
+    }
+  ],
+  "success": true,
+  "total": 15
+}
+```
 <a name="post-movies"></a>
+### POST /movies
+#### Request
+```bash
+curl -i -H $HEADERS -H 'Content-Type: application/json' -X POST -d '{ "title": "Kabhi Eid Kabhi Diwali", "release_year": 2021 }' https://agency-capstone.herokuapp.com/movies
+```
+#### Response
+```bash
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: gunicorn/20.0.4
+Date: Wed, 03 Jun 2020 08:31:23 GMT
+Content-Type: application/json
+Content-Length: 30
+Access-Control-Allow-Headers: Content-Type,Authorization,true
+Access-Control-Allow-Methods: GET,PATCH,POST,DELETE,OPTIONS
+Access-Control-Allow-Origin: *
+Via: 1.1 vegur
+
+{"created":16,"success":true}
+```
 <a name="delete-movies"></a>
+### DELETE /movies
+#### Request
+```bash
+curl -i -H $HEADERS -X DELETE https://agency-capstone.herokuapp.com/movies/16
+```
+#### Response
+```bash
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: gunicorn/20.0.4
+Date: Wed, 03 Jun 2020 08:32:38 GMT
+Content-Type: application/json
+Content-Length: 30
+Access-Control-Allow-Headers: Content-Type,Authorization,true
+Access-Control-Allow-Methods: GET,PATCH,POST,DELETE,OPTIONS
+Access-Control-Allow-Origin: *
+Via: 1.1 vegur
+
+{"deleted":16,"success":true}
+```
 <a name="patch-movies"></a>
+### PATCH /movies
+#### Request
+```bash
+curl -i -H $HEADERS -H 'Content-Type: application/json' -X PATCH -d '{ "release_year": 2013 }' https://agency-capstone.herokuapp.com/movies/10
+```
+#### Response
+```bash
+HTTP/1.1 200 OK
+Connection: keep-alive
+Server: gunicorn/20.0.4
+Date: Wed, 03 Jun 2020 08:34:19 GMT
+Content-Type: application/json
+Content-Length: 30
+Access-Control-Allow-Headers: Content-Type,Authorization,true
+Access-Control-Allow-Methods: GET,PATCH,POST,DELETE,OPTIONS
+Access-Control-Allow-Origin: *
+Via: 1.1 vegur
 
+{"success":true,"updated":10}
+```
+<a name="authentication"></a>
+### Authentication
+They are 3 Roles with distinct permission sets:
 
-
+1. Casting Assistant:
+  - GET /actors (read:actors): Can see all actors
+  - GET /movies (read:movies): Can see all movies
+2. Casting Director (everything from Casting Assistant plus)
+  - POST /actors (create:actors): Can create new Actors
+  - PATCH /actors (edit:actors): Can edit existing Actors
+  - DELETE /actors (delete:actors): Can remove existing Actors from database
+  - PATCH /movies (edit:movies): Can edit existing Movies
+3. Executive Director (everything from Casting Director plus)
+  - POST /movies (create:movies): Can create new Movies
+  - DELETE /movies (delete:movies): Can remove existing Movies from database
