@@ -107,7 +107,7 @@ def create_app(test_config=None):
 
     @app.route('/actors/<int:actor_id>', methods=['DELETE'])
     @requires_auth('delete:actors')
-    def delete_actor(actor_id):
+    def delete_actor(payload, actor_id):
         actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
 
         if not actor:
@@ -125,7 +125,7 @@ def create_app(test_config=None):
 
     @app.route('/movies', methods=['GET'])
     @requires_auth('read:movies')
-    def get_movies():
+    def get_movies(payload):
         page = request.args.get('page', 1, type=int)
         selection = Movie.query.order_by(Movie.id).paginate(
             page,
@@ -146,7 +146,7 @@ def create_app(test_config=None):
 
     @app.route('/movies', methods=['POST'])
     @requires_auth('create:movies')
-    def create_movies():
+    def create_movies(payload):
         body = request.get_json()
 
         if not body:
@@ -177,7 +177,7 @@ def create_app(test_config=None):
 
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
     @requires_auth('edit:movies')
-    def edit_movie(movie_id):
+    def edit_movie(payload, movie_id):
         body = request.get_json()
 
         if not body:
@@ -186,7 +186,7 @@ def create_app(test_config=None):
         movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
 
         if not movie:
-            abort(404, {'message': 'actor not found'})
+            abort(404, {'message': 'movie not found'})
 
         try:
             movie.title = body.get('title', movie.title)
@@ -201,7 +201,7 @@ def create_app(test_config=None):
 
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
     @requires_auth('delete:movies')
-    def delete_movie(movie_id):
+    def delete_movie(payload, movie_id):
         movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
 
         if not movie:
@@ -232,7 +232,7 @@ def create_app(test_config=None):
         return jsonify({
             'success': False,
             'error': e.status_code,
-            'message': e.error
+            'message': e.error['description']
         }), 401
 
     @app.errorhandler(404)

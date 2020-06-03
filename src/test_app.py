@@ -84,7 +84,7 @@ class CapstoneTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 401)
         self.assertFalse(data['success'])
-        self.assertTrue(data['message']['description'],
+        self.assertTrue(data['message'],
                         'Authorization header is expected')
 
     def test_create_actor(self):
@@ -158,82 +158,171 @@ class CapstoneTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 401)
         self.assertFalse(data['success'])
-        self.assertTrue(data['message']['description'],
+        self.assertTrue(data['message'],
                         'Permission not found')
 
-    # def test_delete_actor(self):
-    #     res = self.client().delete('/actors/1')
-    #     data = json.loads(res.data)
+    def test_delete_actor(self):
+        res = self.client().delete('/actors/1',
+                                   headers=headers_casting_director)
+        data = json.loads(res.data)
 
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertTrue(data['success'])
-    #     self.assertEqual(data['deleted'], 1)
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertEqual(data['deleted'], 1)
 
-    # def test_delete_404_actor(self):
-    #     res = self.client().delete('/actors/999999')
-    #     data = json.loads(res.data)
+    def test_404_delete_actor(self):
+        res = self.client().delete('/actors/999999',
+                                   headers=headers_casting_director)
+        data = json.loads(res.data)
 
-    #     self.assertEqual(res.status_code, 404)
-    #     self.assertFalse(data['success'])
-    #     self.assertEqual(data['error'], 404)
-    #     self.assertEqual(data['message'], 'actor not found')
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['error'], 404)
+        self.assertEqual(data['message'], 'actor not found')
 
-    # def test_get_movies(self):
-    #     res = self.client().get('/movies')
-    #     data = json.loads(res.data)
+    def test_401_delete_actor(self):
+        res = self.client().delete('/actors/2')
+        data = json.loads(res.data)
 
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertTrue(data['success'])
-    #     self.assertTrue(len(data['movies']) > 0)
+        self.assertEqual(res.status_code, 401)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['message'],
+                         'Authorization header is expected')
 
-    # def test_404_get_movies(self):
-    #     res = self.client().get('/movies?page=999999')
-    #     data = json.loads(res.data)
+    def test_401_permission_delete_actor(self):
+        res = self.client().delete('/actors/1',
+                                   headers=headers_casting_assistant)
+        data = json.loads(res.data)
 
-    #     self.assertEqual(res.status_code, 404)
-    #     self.assertFalse(data['success'])
-    #     self.assertTrue(data['message'], 'movies not found')
+        self.assertEqual(res.status_code, 401)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['message'], 'Permission not found')
 
-    # def test_create_movie(self):
-    #     movie = {
-    #         'title': 'Kabhi Eid Kabhi Diwali',
-    #         'release_year': '2021'
-    #     }
+    def test_get_movies(self):
+        res = self.client().get('/movies',
+                                headers=headers_casting_assistant)
+        data = json.loads(res.data)
 
-    #     res = self.client().post('/movies', json=movie)
-    #     data = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertTrue(len(data['movies']) > 0)
 
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertTrue(data['success'])
-    #     self.assertTrue(data['created'])
+    def test_404_get_movies(self):
+        res = self.client().get('/movies?page=999999',
+                                headers=headers_casting_assistant)
+        data = json.loads(res.data)
 
-    # def test_patch_movie(self):
-    #     movie = {
-    #         'release_year': '2020'
-    #     }
-    #     res = self.client().patch('/movies/3', json=movie)
-    #     data = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data['success'])
+        self.assertTrue(data['message'], 'movies not found')
 
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertTrue(data['success'])
-    #     self.assertEqual(data['updated'], 3)
+    def test_error_401_get_movies(self):
+        res = self.client().get('/movies?page=1')
+        data = json.loads(res.data)
 
-    # def test_delete_movie(self):
-    #     res = self.client().delete('/movies/1')
-    #     data = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertFalse(data['success'])
+        self.assertTrue(data['message'], 'Authorization header is expected')
 
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertTrue(data['success'])
-    #     self.assertEqual(data['deleted'], 1)
+    def test_create_movie(self):
+        movie = {
+            'title': 'Kabhi Eid Kabhi Diwali',
+            'release_year': 2021
+        }
 
-    # def test_delete_404_movie(self):
-    #     res = self.client().delete('/movies/999999')
-    #     data = json.loads(res.data)
+        res = self.client().post('/movies',
+                                 json=movie,
+                                 headers=headers_executive_producer)
+        data = json.loads(res.data)
 
-    #     self.assertEqual(res.status_code, 404)
-    #     self.assertFalse(data['success'])
-    #     self.assertEqual(data['error'], 404)
-    #     self.assertEqual(data['message'], 'movie not found')
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertTrue(data['created'])
+
+    def test_error_422_create_movie(self):
+        movie = {
+            'release_year': 2022
+        }
+
+        res = self.client().post('/movies',
+                                 json=movie,
+                                 headers=headers_executive_producer)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['message'], 'title cannot be blank')
+
+    def test_edit_movie(self):
+        movie = {
+            'release_year': 2020
+        }
+        res = self.client().patch('/movies/3',
+                                  json=movie,
+                                  headers=headers_casting_director)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertEqual(data['updated'], 3)
+
+    def test_error_422_edit_movie(self):
+        res = self.client().patch('/movies/3',
+                                  headers=headers_executive_producer)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 422)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['message'], 'invalid body JSON')
+
+    def test_error_404_edit_movie(self):
+        movie = {
+            'release_year': 2020
+        }
+        res = self.client().patch('/movies/999999',
+                                  json=movie,
+                                  headers=headers_executive_producer)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['message'], 'movie not found')
+
+    def test_delete_movie(self):
+        res = self.client().delete('/movies/10',
+                                   headers=headers_executive_producer)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertEqual(data['deleted'], 10)
+
+    def test_delete_404_movie(self):
+        res = self.client().delete('/movies/999999',
+                                   headers=headers_executive_producer)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['error'], 404)
+        self.assertEqual(data['message'], 'movie not found')
+
+    def test_error_401_delete_movie(self):
+        res = self.client().delete('/movies/6')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 401)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['message'], 'Authorization header is expected')
+
+    def test_error_401_delete_movie(self):
+        res = self.client().delete('/movies/6',
+                                   headers=headers_casting_assistant)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 401)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['message'], 'Permission not found')
 
 
 # Make the tests conveniently executable

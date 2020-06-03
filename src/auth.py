@@ -182,7 +182,8 @@ def requires_auth(permission=''):
     permission (string): permission (i.e. 'post:drink')
 
     Returns:
-    func: the decorator which passes the decoded payload to the decorated method
+    func: the decorator which passes the decoded
+    payload to the decorated method
     '''
     def requires_auth_decorator(f):
         @wraps(f)
